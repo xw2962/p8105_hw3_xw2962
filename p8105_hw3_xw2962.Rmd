@@ -16,6 +16,10 @@ data("instacart")
 
 ## Problem One 
 
+#### Short descriptions of the dataset:
+
+Dataset "instacart" has `r ncol(instacart)` variables: `r colnames(instacart)`. In this dataset, there are `r nrow(instacart)` rows. And there are `r ncol(instacart)` columns. Here we consider variables "order_dow", "order_hour_of_day","product id", "product_name", "aisle_id" and "aisle"to be important for analysis.
+
 **Q1: How many aisles are there, and which aisles are the most items ordered from?**
 ```{r}
 n_distinct(instacart$aisle_id)
@@ -33,6 +37,7 @@ instacart |>
 ```
 
 #### Description
+
 There are `r n_distinct(instacart$aisle_id)` aisles. Aisles with id: 83, 24 and 123 are the most items ordered from. And their corresponding aisle names are: fresh vegetables, fresh fruits and packaged vegetables fruits.     
 
 **Q2: Make a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered. Arrange aisles sensibly, and organize your plot so others can read it.**
@@ -53,6 +58,10 @@ instacart |>
    coord_flip()
 ```
 
+#### Comment 
+
+For showing the number of items ordered in each aisle, we first grouped the observations by aisle and summarize the number of observation in each group. We then filtered out the aisles with more than 10000 items ordered. Next, we plot a horizontal bar chart with aisle names on the x-axis and number of observations on the y-axis by ordering aisle names with most number of observations to aisle names with least number of observations.  
+
 **Q3: Make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.**
 ```{r}
 rank_df_one=instacart |>
@@ -66,6 +75,12 @@ rank_df_one=instacart |>
       knitr::kable(digits = 1)
 rank_df_one
 ```
+
+#### Comment 
+
+For making a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”, we first filtered out the rows with aisle names that are “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. We then grouped the data by aisle and product name, summarizing the observations in each group and ranking the number of observations in descending order. We kept the top three products with top three highest number of observations. Finally, we arranged the table according to aisle and item ranking. 
+In the table, we can see that: for aisle baking ingredients, the top three most popular items are Light Brown Sugar, 
+Pure Baking Soda and Cane Sugar; for dog food care, the top three most popular items are Snack Sticks Chicken & Rice Recipe Dog Treats,Organix Chicken & Brown Rice Recipe and Small Dog Biscuits; for packaged vegetables fruits, the top three most popular items are Organic Baby Spinach,Organic Raspberries and Organic Blueberries. 
 
 **Q4: Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; format this table for human readers (i.e. produce a 2 x 7 table).** 
 ```{r}
@@ -85,4 +100,7 @@ day_ave_df=instacart |>
 day_ave_df
 ```
 
+#### Comment
+
+For making a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week, we first filtered out the rows with product names "Pink Lady Apples" and "Coffee Ice Cream". Then we grouped our observations by product_name and order_dow. Next, we summarized the mean of order_hour_of_day in each group. We also selected product_name,mean_hour,order_dow to be shown in the table and arranged them by order_dow. For the last step, we used pivot wider, names mutation and knitr to make our table more readable. The resulting table have three columns:order_dow, Coffee Ice Cream and Pink Lady Apples.      
 
