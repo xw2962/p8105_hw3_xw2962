@@ -7,7 +7,7 @@ output: github_document
 
 ## Load `Instacart` Dataset
 
-```{r}
+```{r,message=FALSE}
 library(tidyverse)
 library(dplyr)
 library(p8105.datasets)
@@ -60,10 +60,10 @@ instacart |>
 
 #### Comment 
 
-For showing the number of items ordered in each aisle, we first grouped the observations by aisle and summarize the number of observation in each group. We then filtered out the aisles with more than 10000 items ordered. Next, we plot a horizontal bar chart with aisle names on the x-axis and number of observations on the y-axis by ordering aisle names with most number of observations to aisle names with least number of observations.  
+For showing the number of items ordered in each aisle, we first grouped the observations by aisle and summarized the number of observation in each group. We then filtered out the aisles with more than 10000 items ordered. Next, we plot a horizontal bar chart with aisle names on the x-axis and number of observations on the y-axis by ordering aisle names with most number of observations to aisle names with least number of observations.  
 
 **Q3: Make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.**
-```{r}
+```{r, message=FALSE}
 rank_df_one=instacart |>
       filter(aisle=="baking ingredients"|aisle=="dog food care"|aisle=="packaged vegetables fruits") |>
       group_by(aisle,product_name) |>
@@ -83,7 +83,7 @@ In the table, we can see that: for aisle baking ingredients, the top three most 
 Pure Baking Soda and Cane Sugar; for dog food care, the top three most popular items are Snack Sticks Chicken & Rice Recipe Dog Treats,Organix Chicken & Brown Rice Recipe and Small Dog Biscuits; for packaged vegetables fruits, the top three most popular items are Organic Baby Spinach,Organic Raspberries and Organic Blueberries. 
 
 **Q4: Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; format this table for human readers (i.e. produce a 2 x 7 table).** 
-```{r}
+```{r, message=FALSE}
 day_ave_df=instacart |>
       filter(product_name=="Pink Lady Apples"|product_name=="Coffee Ice Cream") |>
       group_by(product_name,order_dow) |>
