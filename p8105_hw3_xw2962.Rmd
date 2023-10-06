@@ -1,0 +1,88 @@
+---
+title: "p8105_hw3_xw2962"
+author: "Xiaoyu Wu"
+date: "2023-10-06"
+output: github_document
+---
+
+## Load `Instacart` Dataset
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(p8105.datasets)
+data("instacart")
+```
+
+## Problem One 
+
+**Q1: How many aisles are there, and which aisles are the most items ordered from?**
+```{r}
+n_distinct(instacart$aisle_id)
+# find how mant disctint aisles are there 
+instacart |>
+  group_by(aisle_id) |>
+  summarize(n_obs = n()) |>
+  arrange(desc(n_obs))
+# find which aisle ids are the most items ordered from
+instacart |>
+  group_by(aisle) |>
+  summarize(n_obs = n()) |>
+  arrange(desc(n_obs))
+# find which aisle names are the most items ordered from
+```
+
+#### Description
+There are `r n_distinct(instacart$aisle_id)` aisles. Aisles with id: 83, 24 and 123 are the most items ordered from. And their corresponding aisle names are: fresh vegetables, fresh fruits and packaged vegetables fruits.     
+
+**Q2: Make a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered. Arrange aisles sensibly, and organize your plot so others can read it.**
+```{r}
+instacart |> 
+  group_by(aisle) |>
+  summarize(n_obs = n()) |>
+  filter(n_obs>10000) |>
+  mutate(aisle = forcats::fct_reorder(aisle, n_obs)) |>
+  ggplot(aes(x=aisle,y=n_obs)) + 
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Number of Items Ordered in each Aisle",
+    x = "Aisle Name",
+    y = "Number of Items",
+    caption = "Data from the p8105.datasets"
+  ) +
+   coord_flip()
+```
+
+**Q3: Make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.**
+```{r}
+rank_df_one=instacart |>
+      filter(aisle=="baking ingredients"|aisle=="dog food care"|aisle=="packaged vegetables fruits") |>
+      group_by(aisle,product_name) |>
+      summarize(
+        n_obs = n()) |>
+      mutate(item_ranking = min_rank(desc(n_obs))) |>
+      filter(min_rank(desc(n_obs)) < 4) |>
+      arrange(aisle,item_ranking) |>
+      knitr::kable(digits = 1)
+rank_df_one
+```
+
+**Q4: Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; format this table for human readers (i.e. produce a 2 x 7 table).** 
+```{r}
+day_ave_df=instacart |>
+      filter(product_name=="Pink Lady Apples"|product_name=="Coffee Ice Cream") |>
+      group_by(product_name,order_dow) |>
+      summarize(
+         mean_hour = mean(order_hour_of_day, na.rm = TRUE)) |>
+      select(product_name,mean_hour,order_dow)  |>
+      arrange(order_dow) |>
+      pivot_wider(
+        names_from = product_name,
+        values_from = mean_hour) |>
+      mutate(
+    order_dow = recode(order_dow, "0" = "Sunday", "1" = "Monday", "2" = "Tuesday","3" = "Wednesday","4" = "Thursday","5" = "Friday","6" = "Saturday")) |>
+      knitr::kable(digits = 1)
+day_ave_df
+```
+
+
