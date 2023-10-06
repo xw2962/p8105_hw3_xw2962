@@ -104,3 +104,27 @@ day_ave_df
 
 For making a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week, we first filtered out the rows with product names "Pink Lady Apples" and "Coffee Ice Cream". Then we grouped our observations by product_name and order_dow. Next, we summarized the mean of order_hour_of_day in each group. We also selected product_name,mean_hour,order_dow to be shown in the table and arranged them by order_dow. For the last step, we used pivot wider, names mutation and knitr to make our table more readable. The resulting table have three columns:order_dow, Coffee Ice Cream and Pink Lady Apples.      
 
+## Problem Two
+
+## Load ` BRFSS` Dataset
+
+```{r}
+library(p8105.datasets)
+data("brfss_smart2010")
+```
+
+```{r}
+brfss_smart_df=
+   brfss_smart2010 |> 
+  janitor::clean_names() |> 
+# format the data to use appropriate variable names
+  filter(topic=="Overall Health") |>
+# focus on the “Overall Health” topic
+  filter(response=="Excellent"|response=="Fair"|response=="Good"|response=="Poor"|response=="Very good") |>
+# include only responses from “Excellent” to “Poor”
+  mutate(response=as.factor(response)) |> 
+  mutate(response=forcats::fct_relevel(response,c("Poor","Fair","Good","Very good","Excellent")))
+# organize responses as a factor taking levels ordered from “Poor” to “Excellent”
+brfss_smart_df
+```
+
