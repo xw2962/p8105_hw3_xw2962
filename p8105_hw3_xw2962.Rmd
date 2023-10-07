@@ -154,8 +154,8 @@ In 2002, six states: CT,FL,MA,NC,NJ and PA were observed at 7 or more locations.
 
 In 2010, fourteen states: CA,CO,FL,MA,MD,NC,NE,NJ,NY,OH,PA,SC,TX and WA were observed at 7 or more locations.
 
-**Q2: Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. Make a “spaghetti” plot of this average value over time within a state **
-```{r}
+**Q2: Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. Make a “spaghetti” plot of this average value over time within a state.**
+```{r, warning=FALSE,message=FALSE}
         brfss_smart_df |>
         filter(response=="Excellent") |>
         group_by(locationabbr,year) |>
@@ -207,7 +207,7 @@ distribution_plot
 ## Problem Three
 
 #### Import Participants’ Demographic Data and Clean 
-```{r}
+```{r,message=FALSE}
 demo_df = 
   read_csv("./data/nhanes_covar.csv", skip = 4)|>
   janitor::clean_names()|>
@@ -230,7 +230,7 @@ demo_df =
 demo_df
 ```
 #### Import Participants’ Accelerometer Data and Clean 
-```{r}
+```{r,message=FALSE}
 accel_df = 
   read_csv("./data/nhanes_accel.csv")|>
   janitor::clean_names() 
@@ -254,7 +254,7 @@ sex_edu_df = merged_demo_accel_df|>
 sex_edu_df
 ```
 #### Visualization of the Age Distributions for Men and Women in each Education Category
-```{r}
+```{r,message=FALSE}
 sex_edu_age_df  = merged_demo_accel_df|>
   group_by(sex, education)|>
   summarize(mean_age = mean(age, na.rm = TRUE))
@@ -270,7 +270,7 @@ sex_edu_age_plot
 We could see in the plot that, for people who have more than high school degree, more of them are younger people. For people who have less than high school degree, more of them are older people.
 
 #### Plot Total Activities (y-axis) against Age (x-axis)
-```{r}
+```{r,message=FALSE}
 acc_agg_df = merged_demo_accel_df|>
   mutate(
     aggregate_move = rowSums(select(merged_demo_accel_df, starts_with("min")))
@@ -288,7 +288,7 @@ aggregated_age_plot
 From the plots, we can see that all movements begin decreasing as ages exceed 60. In the high school equivalent and more than high school groups, female has higher movements than male. Whereas in the less than high school group, male's movement exceeds female's movement around age 40.   
 
 #### Three-paneled Plot
-```{r}
+```{r,message=FALSE}
 group_24_df = merged_demo_accel_df|>
   group_by(education, sex)|>
   summarise(across(starts_with("min"), ~ mean(.), .names = "mean_{.col}"))|>
