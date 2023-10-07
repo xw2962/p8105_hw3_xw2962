@@ -23,7 +23,7 @@ Dataset "instacart" has `r ncol(instacart)` variables: `r colnames(instacart)`. 
 **Q1: How many aisles are there, and which aisles are the most items ordered from?**
 ```{r}
 n_distinct(instacart$aisle_id)
-# find how mant disctint aisles are there 
+# find how many distinct aisles are there 
 instacart |>
   group_by(aisle_id) |>
   summarize(n_obs = n()) |>
@@ -106,7 +106,7 @@ For making a table showing the mean hour of the day at which Pink Lady Apples an
 
 ## Problem Two
 
-#### Load ` BRFSS` Dataset
+## Load ` BRFSS` Dataset
 
 ```{r}
 library(p8105.datasets)
