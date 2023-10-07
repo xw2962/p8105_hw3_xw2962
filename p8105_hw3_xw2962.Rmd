@@ -128,3 +128,80 @@ brfss_smart_df=
 brfss_smart_df
 ```
 
+**Q1: In 2002, which states were observed at 7 or more locations? What about in 2010?**
+```{r}
+brfss_2002=brfss_smart_df |>
+           filter(year==2002) |>
+           group_by(locationabbr) |>
+           summarize(
+             n_obs = n(),
+             n_location = n_distinct(locationdesc)) |>
+           filter(n_location > 6)  
+brfss_2002
+
+brfss_2010=brfss_smart_df |>
+           filter(year==2010) |>
+           group_by(locationabbr) |>
+           summarize(
+             n_obs = n(),
+             n_location = n_distinct(locationdesc)) |>
+           filter(n_location > 6)  
+brfss_2010
+```
+
+#### Comment
+In 2002, six states: CT,FL,MA,NC,NJ and PA were observed at 7 or more locations.
+
+In 2010, fourteen states: CA,CO,FL,MA,MD,NC,NE,NJ,NY,OH,PA,SC,TX and WA were observed at 7 or more locations.
+
+**Q2: Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. Make a “spaghetti” plot of this average value over time within a state **
+```{r}
+        brfss_smart_df |>
+        filter(response=="Excellent") |>
+        group_by(locationabbr,year) |>
+        summarize(
+        response=response,
+        year=year,
+        mean_data = mean(data_value, na.rm = TRUE)) |>
+        select(response, year,locationabbr,mean_data) |>
+        rename(state=locationabbr) |>
+        ggplot(aes(x = year, y = mean_data,color=state)) + 
+        geom_line() +
+        labs(
+    title = "Average Value over Time within a State",
+    x = "Year",
+    y = "Mean Value",
+    caption = "Data from the p8105.datasets"
+  )+
+  viridis::scale_color_viridis(
+      name = "State",
+      discrete=TRUE)
+```
+
+#### Comment
+
+For cleaning the dataset, we first filtered out the observations with responses that are only excellent. Then we grouped the observations by locationabbr and year. Next, we calculated the mean of data_value according to this grouping. Finally, we selected the variables we want and renamed "locationabbr" to "state".
+
+For making the “spaghetti” plot, we set the aesthetics so that x-axis showing the year variable, y-axis showing the mean_data variable and color takes the state variable. Then, we chose the geom_line, labeling the axises and graph, as well as setting the color scale. 
+
+**Q3: Make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.**
+```{r}
+
+distribution_df = brfss_smart_df|>
+  filter(
+    locationabbr == "NY"
+  )|>
+  filter(
+    year == 2006 | year == 2010)
+
+distribution_plot= distribution_df |>
+  ggplot(aes(x = data_value, fill = locationdesc)) + 
+  geom_density(alpha = .3, adjust = .75)+
+  facet_grid(. ~ year)
+
+distribution_plot
+```
+
+#### Comment
+
+
