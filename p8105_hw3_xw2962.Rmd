@@ -136,7 +136,9 @@ brfss_2002=brfss_smart_df |>
            summarize(
              n_obs = n(),
              n_location = n_distinct(locationdesc)) |>
-           filter(n_location > 6)  
+           filter(n_location > 6) |>
+           arrange(n_location) |>
+           knitr::kable()
 brfss_2002
 
 brfss_2010=brfss_smart_df |>
@@ -145,7 +147,9 @@ brfss_2010=brfss_smart_df |>
            summarize(
              n_obs = n(),
              n_location = n_distinct(locationdesc)) |>
-           filter(n_location > 6)  
+           filter(n_location > 6) |>
+           arrange(n_location) |>
+           knitr::kable()
 brfss_2010
 ```
 
