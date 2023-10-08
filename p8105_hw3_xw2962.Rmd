@@ -205,6 +205,8 @@ distribution_plot
 
 #### Comment
 
+For making the two-panel plot, we first filtered out the rows for which state is NY and then filtered out the rows for which years are 2006 and 2010. Then we set the aesthetics using locationdesc as x variable and data_value as y variable and response as fill, creating bar plots using geom_col. And next we create two panels seperately for year 2006 and year 2010 using facet function. Last, we flip the plot using coord_flip() to make better view. We can see on the plot that larger the data value, worse the response for both years. Distribution of data value for excellent response is around 0 to 25 for each county in NY. Distribution of data value for good and very good responses are around 25 to 75 for each county in NY. And distribution of data value for fair and poor responses are around 75 to 100 for each county in NY. The distribution of data values for good and very good responses take the largest percentage or part of the whole distribution.      
+
 ## Problem Three
 
 #### Import Participants’ Demographic Data and Clean 
