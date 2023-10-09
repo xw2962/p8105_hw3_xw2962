@@ -32,7 +32,9 @@ instacart |>
 instacart |>
   group_by(aisle) |>
   summarize(n_obs = n()) |>
-  arrange(desc(n_obs))
+  arrange(desc(n_obs)) |>
+  head() |>
+  knitr::kable()
 # find which aisle names are the most items ordered from
 ```
 
@@ -134,7 +136,6 @@ brfss_2002=brfss_smart_df |>
            filter(year==2002) |>
            group_by(locationabbr) |>
            summarize(
-             n_obs = n(),
              n_location = n_distinct(locationdesc)) |>
            filter(n_location > 6) |>
            arrange(n_location) |>
@@ -145,7 +146,6 @@ brfss_2010=brfss_smart_df |>
            filter(year==2010) |>
            group_by(locationabbr) |>
            summarize(
-             n_obs = n(),
              n_location = n_distinct(locationdesc)) |>
            filter(n_location > 6) |>
            arrange(n_location) |>
