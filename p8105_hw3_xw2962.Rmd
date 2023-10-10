@@ -247,7 +247,7 @@ accel_df_pivot=
   janitor::clean_names() |>
   pivot_longer(
     min1:min1440, 
-    names_to = "time_mins",
+    names_to = "time",
     values_to = "activity"
   )
 accel_df=
