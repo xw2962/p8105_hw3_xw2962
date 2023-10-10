@@ -242,22 +242,34 @@ demo_df
 ```
 #### Import Participants’ Accelerometer Data and Clean 
 ```{r,message=FALSE}
-accel_df = 
+accel_df_pivot= 
   read_csv("./data/nhanes_accel.csv")|>
-  janitor::clean_names() 
+  janitor::clean_names() |>
+  pivot_longer(
+    min1:min1440, 
+    names_to = "time_mins",
+    values_to = "activity"
+  )
+accel_df=
+  read_csv("./data/nhanes_accel.csv")|>
+  janitor::clean_names()
 
-accel_df
+accel_df_pivot
 ```
-#### Merge `demo_df` and `accel_df`
+#### Merge Two Cleaned Datasets 
 ```{r}
-merged_demo_accel_df= left_join(demo_df, accel_df, by = join_by(seqn))
+merged_demo_accel_df= 
+  left_join(demo_df, accel_df_pivot, by = join_by(seqn)) 
 
 head(merged_demo_accel_df)|>
   knitr::kable()
+# merge two cleaned datasets and return a table  
+merged_demo_accel_data=left_join(demo_df, accel_df, by = join_by(seqn))
+# merge two datasets for later use 
 ```
 #### Table for the Number of Men and Women in each Education Category
 ```{r, message=FALSE}
-sex_edu_df = merged_demo_accel_df|>
+sex_edu_df = merged_demo_accel_data|>
   group_by(sex, education)|>
   summarize(counts = n())|>
   pivot_wider(names_from = sex, values_from = counts) |>
@@ -266,11 +278,11 @@ sex_edu_df
 ```
 #### Visualization of the Age Distributions for Men and Women in each Education Category
 ```{r,message=FALSE}
-sex_edu_age_df  = merged_demo_accel_df|>
+sex_edu_age_df  = merged_demo_accel_data|>
   group_by(sex, education)|>
   summarize(mean_age = mean(age, na.rm = TRUE))
 
-sex_edu_age_plot = merged_demo_accel_df|>
+sex_edu_age_plot = merged_demo_accel_data|>
   ggplot(aes(x = age, color = sex))+
   geom_density()+
   facet_grid(. ~ education)
@@ -282,9 +294,9 @@ We could see in the plot that, for people who have more than high school degree,
 
 #### Plot Total Activities (y-axis) against Age (x-axis)
 ```{r,message=FALSE}
-acc_agg_df = merged_demo_accel_df|>
+acc_agg_df = merged_demo_accel_data|>
   mutate(
-    aggregate_move = rowSums(select(merged_demo_accel_df, starts_with("min")))
+    aggregate_move = rowSums(select(merged_demo_accel_data, starts_with("min")))
   )
 
 aggregated_age_plot = acc_agg_df|>
@@ -300,10 +312,10 @@ From the plots, we can see that all movements begin decreasing as ages exceed 60
 
 #### Three-paneled Plot
 ```{r,message=FALSE}
-group_24_df = merged_demo_accel_df|>
+group_24_df = merged_demo_accel_data|>
   group_by(education, sex)|>
   summarise(across(starts_with("min"), ~ mean(.), .names = "mean_{.col}"))|>
-  pivot_longer(cols = starts_with("mean_"), names_to = "time", values_to = "mean")|>
+  pivot_longer(cols=starts_with("mean_"), names_to = "time", values_to = "mean")|>
   mutate(
     time = substring(time, 9), 
     time= as.numeric(time)
