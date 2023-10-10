@@ -283,8 +283,8 @@ sex_edu_age_df  = merged_demo_accel_data|>
   summarize(mean_age = mean(age, na.rm = TRUE))
 
 sex_edu_age_plot = merged_demo_accel_data|>
-  ggplot(aes(x = age, color = sex))+
-  geom_density()+
+  ggplot(aes(x = age, fill = sex))+
+  geom_density(alpha = .4)+
   facet_grid(. ~ education)
 sex_edu_age_plot
 ```
