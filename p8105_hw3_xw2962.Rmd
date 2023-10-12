@@ -338,7 +338,7 @@ group_24_df = merged_demo_accel_data|>
 
 group_24_plot = group_24_df|>
   ggplot(aes(x = time, y = mean,color = sex))+
-  geom_point(alpha = .2)+
+  geom_point(alpha = .1)+
   geom_smooth(se=FALSE)+
   labs(x="Minute of the day",y="Mean Activity Value",title="24-hour Activity Time Courses for each Education Level") +
   facet_grid(. ~ education) +
