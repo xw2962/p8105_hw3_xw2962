@@ -184,7 +184,8 @@ In 2010, fourteen states: `r names(brfss_2010)` were observed at 7 or more locat
   )+
   viridis::scale_color_viridis(
       name = "State",
-      discrete=TRUE)
+      discrete=TRUE) +
+  theme_minimal()
 ```
 
 #### Comment
@@ -212,7 +213,8 @@ distribution_plot= distribution_df |>
   labs(
     title = "Distribution of Data value for Responses across NY in 2006 and 2010",
     caption = "Data from the p8105.datasets"
-  )
+  )+
+  theme_minimal()
 distribution_plot
 ```
 
@@ -292,7 +294,8 @@ sex_edu_age_df  = merged_demo_accel_data|>
 sex_edu_age_plot = merged_demo_accel_data|>
   ggplot(aes(x = age, fill = sex))+
   geom_density(alpha = .4)+
-  facet_grid(. ~ education)
+  facet_grid(. ~ education) +
+  theme_minimal()
 sex_edu_age_plot
 ```
 
@@ -312,7 +315,8 @@ aggregated_age_plot = acc_agg_df|>
   ggplot(aes(x = age, y = aggregate_move, color = sex))+
   geom_point(alpha = .5)+
   geom_smooth()+
-  facet_grid(. ~ education)
+  facet_grid(. ~ education)+
+  theme_minimal()
 aggregated_age_plot
 ```
 
@@ -333,13 +337,16 @@ group_24_df = merged_demo_accel_data|>
   )
 
 group_24_plot = group_24_df|>
-  ggplot(aes(x = time, y = mean, color = sex))+
-  geom_line()+
-  facet_grid(. ~ education)
+  ggplot(aes(x = time, y = mean,color = sex))+
+  geom_point(alpha = .2)+
+  geom_smooth(se=FALSE)+
+  labs(x="Minute of the day",y="Mean Activity Value",title="24-hour Activity Time Courses for each Education Level") +
+  facet_grid(. ~ education) +
+  theme_minimal()
 group_24_plot
 ```
 
 #### Comment
-For making a three-panel plot that shows the 24-hour activity time courses for each education level, we grouped the merged dataset by education and sex. Then we summarized the means for each column starting with min, substituting each column name with "mean_". Next, we used pivot longer functions to switch from wide to longer version of the dataframe. Here, we also used mutate function to extract the time as a numeric value. We set time as x variable and mean as y variable and sex as color in aesthetics and used geom_line for plotting. Finally, we created seperate panels for different education levels using facet_grid function.     
+For making a three-panel plot that shows the 24-hour activity time courses for each education level, we grouped the merged dataset by education and sex. Then we summarized the means for each column starting with min, substituting each column name with "mean_". Next, we used pivot longer functions to switch from wide to longer version of the dataframe. Here, we also used mutate function to extract the time as a numeric value. We set time as x variable and mean as y variable and sex as color in aesthetics and used geom_point as well as geom_smooth for plotting. Finally, we added axis labels and created seperate panels for different education levels using facet_grid function.     
 
 For people in the group of high school equivalent and more than high school, average movement for female is higher than average movement for male. And people in all these three groups show low movement from 0 to 250min. 
