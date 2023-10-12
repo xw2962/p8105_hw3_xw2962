@@ -342,6 +342,9 @@ group_24_plot = group_24_df|>
   geom_smooth(se=FALSE)+
   labs(x="Minute of the day",y="Mean Activity Value",title="24-hour Activity Time Courses for each Education Level") +
   facet_grid(. ~ education) +
+  scale_color_hue(
+      name = "Sex", 
+      h = c(100, 300)) +
   theme_minimal()
 group_24_plot
 ```
