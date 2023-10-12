@@ -139,7 +139,10 @@ brfss_2002=brfss_smart_df |>
              n_location = n_distinct(locationdesc)) |>
            filter(n_location > 6) |>
            arrange(n_location) |>
-           knitr::kable()
+           pivot_wider(
+             names_from = locationabbr,
+             values_from=n_location
+           ) 
 brfss_2002
 
 brfss_2010=brfss_smart_df |>
@@ -149,14 +152,17 @@ brfss_2010=brfss_smart_df |>
              n_location = n_distinct(locationdesc)) |>
            filter(n_location > 6) |>
            arrange(n_location) |>
-           knitr::kable()
+           pivot_wider(
+             names_from = locationabbr,
+             values_from=n_location
+           ) 
 brfss_2010
 ```
 
 #### Comment
-In 2002, six states: CT,FL,MA,NC,NJ and PA were observed at 7 or more locations.
+In 2002, six states: `r names(brfss_2002)` were observed at 7 or more locations.
 
-In 2010, fourteen states: CA,CO,FL,MA,MD,NC,NE,NJ,NY,OH,PA,SC,TX and WA were observed at 7 or more locations.
+In 2010, fourteen states: `r names(brfss_2010)` were observed at 7 or more locations.
 
 **Q2: Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. Make a “spaghetti” plot of this average value over time within a state.**
 ```{r, warning=FALSE,message=FALSE}
